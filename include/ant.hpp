@@ -45,7 +45,6 @@ private:
     void topLeft_collision();
     void bottomLeft_collision();
     void bottomRight_collision();
-    void rotate_obj(float angle);
 public:
     ant(sf::Texture * textureptr);
     ~ant();
@@ -61,6 +60,7 @@ public:
     void rotate();
     void found_food(food * food);
     bool get_has_food();
+    void rotate_obj(float angle);
     void handle_collision(collision::collision which);
     
     // static 
