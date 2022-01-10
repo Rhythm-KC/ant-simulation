@@ -49,13 +49,16 @@ void Game::windowCollision(){
     bool bottom = false;
     bool left = false;
     bool right = false;
+    float compare  = simobj->getGlobalBounds().top + (3 *simobj->getGlobalBounds().height )/2;
     if(simobj->getGlobalBounds().left  <=0){
         left = true;
+        simobj->rotate_obj(simobj->get_rotation() + 180);
         simobj->setPos(sf::Vector2f(simobj->getGlobalBounds().width/2,simobj->getPos().y));
     }
     // right collison
     else if(simobj->getGlobalBounds().left + simobj->getGlobalBounds().width >= window->getSize().x){
         right = true;
+        simobj->rotate_obj(simobj->get_rotation() + 180);
         simobj->setPos(sf::Vector2f(window->getSize().x- simobj-> getGlobalBounds().width/2, simobj->getPos().y));
 
         
@@ -63,21 +66,21 @@ void Game::windowCollision(){
     // top collison
     if(simobj->getGlobalBounds().top <=0){
         top = true;
+        simobj->rotate_obj(simobj->get_rotation() + 180);
         if(simobj->getGlobalBounds().top + simobj->getGlobalBounds().height/2 <= 0 ){
             simobj->setPos(sf::Vector2f(simobj->getPos().x,simobj->getGlobalBounds().height/2));
         }
     }
     // bottom collision
-    float compare  = simobj->getGlobalBounds().top + (3 *simobj->getGlobalBounds().height )/2;
-    if(compare >= window->getSize().y){
+    else if(compare >= window->getSize().y){
         bottom = true;
+        simobj->rotate_obj(simobj->get_rotation() + 180);
         simobj->setPos(sf::Vector2f(simobj->getPos().x, simobj->getPos().y -(compare - window->getSize().y ) ));
     }
     collision::collision which_collision;
     if(top = true){
        which_collision = collision::top; 
-    }
-    if(bottom= true){
+    }else if(bottom= true){
        which_collision = collision::bottom; 
     }
     if(left= true){
@@ -98,7 +101,8 @@ void Game::windowCollision(){
            which_collision = collision::bottom_right;
        }
     }
-    simobj->handle_collision(which_collision);
+    //std::cout << which_collision << std::endl;
+    //simobj->handle_collision(which_collision);
     
 }
 
