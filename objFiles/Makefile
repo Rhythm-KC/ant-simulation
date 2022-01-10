@@ -9,7 +9,7 @@ main.o: ../src/main.cpp ../include/Game.hpp
 Game.o: ../src/Game.cpp ../include/Game.hpp ../include/ant.hpp 
 	g++ -c ../src/Game.cpp 
 ant.o: ../src/ant.cpp ../include/ant.hpp ../include/pheromon.hpp ../include/food.hpp 
-	g++ -c src/ant.cpp 
+	g++ -c ../src/ant.cpp 
 food.o: ../src/food.cpp ../include/food.hpp
 	g++ -c ../src/food.cpp
 pheromon.o: ../src/pheromon.cpp ../include/pheromon.hpp
