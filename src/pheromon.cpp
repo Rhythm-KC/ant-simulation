@@ -1,6 +1,6 @@
 #include "../include/pheromon.hpp" 
 int pheromon::PHEROMON_COUNT = 1; 
-int pheromon::PHEROMON_STRENGTH =500;
+int pheromon::PHEROMON_STRENGTH =200;
 pheromon::pheromon(pheromon_types type, float posX, float posY){
     this->shape = sf::CircleShape(4);
     this->type = type;
