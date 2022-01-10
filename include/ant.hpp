@@ -19,8 +19,8 @@ private:
     int drop_time;
     bool has_food;
     food * ants_food; 
-    float posX;
-    float posY;
+    static float posX;
+    static float posY;
     std::default_random_engine generator; 
     std:: uniform_real_distribution<float> distribution;
     sf::Sprite sprite;
