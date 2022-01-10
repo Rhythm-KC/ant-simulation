@@ -70,7 +70,7 @@ void ant::render(sf::RenderTarget &target){
 */
 void ant::move_around(){
     // generating new angle of to which the ant has to be rotated
-    if(turn_cooldown == 50){ 
+    if(turn_cooldown == 25){ 
         float angle = distribution(generator);
         sprite.rotate(angle);
         boundingShape.rotate(angle);
@@ -83,26 +83,26 @@ void ant::move_around(){
     double sprite_angle = angle*((M_PI)/180); // converting to raidians
 
     if(angle > 0 && angle <=90){
-        this->posY = - cos(sprite_angle) * 2.0f;
-        this->posX = sin(sprite_angle) * 2.0f;
+        this->posY = - cos(sprite_angle) * 1.5f;
+        this->posX = sin(sprite_angle) * 1.5f;
     }
     else if( angle > 90 && angle <= 180) {
         angle = 180- angle;
         sprite_angle = angle *(M_PI/180);
-        this->posX = sin(sprite_angle) * 2.0f;
-        posY = cos(sprite_angle) * 2.f;
+        this->posX = sin(sprite_angle) * 1.5f;
+        posY = cos(sprite_angle) * 1.5f;
 
     }else if (angle > 180 && angle <= 270){
         angle =  angle - 180;
         sprite_angle = angle * (M_PI/180);
-        posX = -sin(sprite_angle) * 2.f;
-        posY = cos(sprite_angle) * 2.f;
+        posX = -sin(sprite_angle) * 1.5f;
+        posY = cos(sprite_angle) * 1.5f;
     }else if(angle > 270 && angle <= 360)
     {
         angle = angle -270;
         sprite_angle = angle *(M_PI /180);
-        posX = -cos(sprite_angle) * 2.f;
-        posY = -sin(sprite_angle) * 2.f;
+        posX = -cos(sprite_angle) * 1.5f;
+        posY = -sin(sprite_angle) * 1.5f;
 
     }
     // moving the ant obj
@@ -183,14 +183,14 @@ void ant::update(){
     keyBoard_movement();
     keyboard_rotate();
     
-    std::cout << "angle " << sprite.getRotation()<< std::endl;
-    std::cout << "top " << sprite.getGlobalBounds().top << std::endl;
-    std::cout << "left "  << sprite.getGlobalBounds().left<< std::endl;
-    std::cout << "pos x " << sprite.getPosition().x<< std::endl;
-    std::cout << "pos y " << sprite.getPosition().y<< std::endl;
-    std::cout << "height " << sprite.getGlobalBounds().height<< std::endl;
-    std::cout << "width " << sprite.getGlobalBounds().width<< std::endl;
-    std::cout << "/////////////" <<std::endl; 
+    //std::cout << "angle " << sprite.getRotation()<< std::endl;
+    //std::cout << "top " << sprite.getGlobalBounds().top << std::endl;
+    //std::cout << "left "  << sprite.getGlobalBounds().left<< std::endl;
+    //std::cout << "pos x " << sprite.getPosition().x<< std::endl;
+    //std::cout << "pos y " << sprite.getPosition().y<< std::endl;
+    //std::cout << "height " << sprite.getGlobalBounds().height<< std::endl;
+    //std::cout << "width " << sprite.getGlobalBounds().width<< std::endl;
+    //std::cout << "/////////////" <<std::endl; 
 }
 
 /* provides with the angle at which the ant object is rotated in degrees
@@ -327,29 +327,29 @@ void ant::bottomRight_collision(){
 }
 
 void ant::handle_collision(collision::collision which){
-    if(which = collision::top){
+    if(which == collision::top){
         top_collision();
     }
-    if(which = collision::bottom){
+    if(which == collision::bottom){
         bottom_collision();
     }
-    if(which = collision::right){
+    if(which == collision::right){
         right_collision();
     }
-    if(which = collision::left){
+    if(which == collision::left){
         left_collision();
     }
-    if(which = collision::bottom_left){
+    if(which == collision::bottom_left){
         bottomLeft_collision();
     }
-    if(which = collision::bottom_right){
+    if(which == collision::bottom_right){
         bottomRight_collision();
     }
-    if(which = collision::top_right){
+    if(which == collision::top_right){
         topRight_collision();
         
     }
-    if(which = collision::top_left){
+    if(which == collision::top_left){
         topLeft_collision();
     }
 }
