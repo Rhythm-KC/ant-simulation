@@ -1,20 +1,27 @@
 #include "../include/ant.hpp"
 #include <iostream>
 #include <cmath>
+// setting up static methods and variables 
+float ant::posX = 400.f;
+float ant::posY = 400.f;
+void ant::set_srand(){
+    srand(time(NULL));
+}
+std::vector<float> ant:: generated_points = std::vector<float>();
 std::vector<pheromon> * ant::pheromones_storage = new std::vector<pheromon>;
+
+//constructor
 ant::ant(sf::Texture * textureptr) : distribution(-30.f, 30.f) 
 {
     init_variables(); 
+
     this->sprite.setTexture(*textureptr);
     sprite.scale(sf::Vector2f(0.12f,0.12f));
+    generate_position(); 
     this->sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2));
     boundingShape.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height ));
     boundingShape.setFillColor(sf::Color::White);
     boundingShape.setOrigin(sf::Vector2f(boundingShape.getLocalBounds().width/2,boundingShape.getLocalBounds().height));
-
-    sprite.setPosition(sf::Vector2f(posX, posY));
-    boundingShape.setPosition(sf::Vector2f(posX, posY));
-    
 }
 
 ant::~ant()
@@ -25,11 +32,8 @@ void ant::init_variables(){
     this->generator = std::default_random_engine();
     turn_cooldown = 0;
     drop_time = 50;
-    posX = 400.f;
-    posY = 400.f;
     has_food = false;
     ants_food = nullptr;
-    orientation * ant_orientation = (orientation *) calloc(sizeof(orientation), 1);
 
 }
 void ant::movement(){
@@ -115,15 +119,6 @@ void ant::move_around(){
     drop_pheromon();
 }
 
-/*
-    rotates the ant object 5 degrees relative to its current angle 
-    if the current angle is between 270 to 360 and 0 to 90 than the rotaion is clockwise
-    else ant-clock wise
-*/
-void ant::rotate(){
-    float current_angle = sprite.getRotation();
-
-}
 void ant::keyboard_rotate(){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
         sprite.rotate(2.f);
@@ -223,135 +218,28 @@ void ant::found_food(food * food){
 }
 
 
-void ant::calculate_orientation(){
-    float angle = sprite.getRotation();
-
-}
 
 void ant::rotate_obj(float angle){
-    sprite.rotate(angle);
-    boundingShape.rotate(angle);
+    sprite.setRotation(angle);
+    boundingShape.setRotation(angle);
 }
 
 bool ant::get_has_food(){
     return has_food;
 }
 
-void ant::top_collision(){
-    float angle = sprite.getRotation();
-    if(angle >= 0 && angle <90){
-       rotate_obj(30); 
+void ant::generate_position(){
+    int radius = 50;
+    float theta = (rand()%200)/(float)100;
+    while(std::find(generated_points.begin(), generated_points.end(), theta) != generated_points.end() && !generated_points.empty()){
+        float theta = (rand()%200)/(float)100;
     }
-    if(angle > 270 && angle < 360){
-        rotate_obj(-30);
-    }
-
-}
-
-void ant::bottom_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 90 && angle < 180){
-       rotate_obj(-30); 
-    }
-    if(angle >= 180&& angle < 270){
-       rotate_obj(30);
-    }
-
-}
-
-void ant::left_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 180 && angle <=270){
-       rotate_obj(-30); 
-    }
-    if(angle > 270 && angle <360){
-        rotate_obj(30);
-    }
-}
-
-void ant::right_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 0 && angle <=90){
-       rotate_obj(-30); 
-    }
-    if(angle > 90 && angle < 180){
-        rotate_obj(30);
-    }
-
-}
-
-void ant::topRight_collision(){
-    float angle = sprite.getRotation();
-    if(angle == 0 || (angle >270 && angle < 360)){
-        rotate_obj(-30);
-
-    }
-    if(angle > 0 && angle <180){
-       rotate_obj(30); 
-    }
-
-}
-
-void ant::topLeft_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 0 && angle <90){
-       rotate_obj(30);
-    }
-    if(angle > 180 && angle < 360){
-        rotate_obj(-30);
-    }
-
-}
-
-void ant::bottomLeft_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 180 && angle <=270){
-       rotate_obj(-30); 
-    }
-    if(angle > 270 && angle < 360){
-        rotate_obj(30);
-    }
-
-}
-
-void ant::bottomRight_collision(){
-    float angle = sprite.getRotation();
-    if(angle > 0 && angle <=90){
-       rotate_obj(-30); 
-    }
-    if(angle > 90 && angle < 270){
-        rotate_obj(30);
-    }
-
-
-}
-
-void ant::handle_collision(collision::collision which){
-    if(which == collision::top){
-        top_collision();
-    }
-    if(which == collision::bottom){
-        bottom_collision();
-    }
-    if(which == collision::right){
-        right_collision();
-    }
-    if(which == collision::left){
-        left_collision();
-    }
-    if(which == collision::bottom_left){
-        bottomLeft_collision();
-    }
-    if(which == collision::bottom_right){
-        bottomRight_collision();
-    }
-    if(which == collision::top_right){
-        topRight_collision();
-        
-    }
-    if(which == collision::top_left){
-        topLeft_collision();
-    }
+    generated_points.push_back(theta);
+    theta*= (2*M_PI);
+    float y = posY - sin(theta) * radius + 40.f;
+    float x = posX + cos(theta) * radius + 40.f;
+    setPos(sf::Vector2f(x,y));
+    rotate_obj(theta * 360);
 }
 
 

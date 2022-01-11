@@ -1,5 +1,6 @@
 #ifndef ANT_H
 #define ANT_H
+#include <ctime>
 #include <SFML/Graphics.hpp>
 #include "CollisionType.hpp"
 #include "pheromon.hpp"
@@ -8,19 +9,14 @@
 class ant 
 {
 private:
-    typedef struct Orientation{
-        float top;
-        float bottom;
-        float left;
-        float rigth;
-    } orientation;
-
-    orientation * ant_orientation;
+    // static variables 
+    static float posX;
+    static float posY;
+    static std::vector<float> generated_points;
+    // non static variables
     int drop_time;
     bool has_food;
     food * ants_food; 
-    static float posX;
-    static float posY;
     std::default_random_engine generator; 
     std:: uniform_real_distribution<float> distribution;
     sf::Sprite sprite;
@@ -36,15 +32,10 @@ private:
     void move_around();
     void keyBoard_movement();
     void keyboard_rotate();
-    void calculate_orientation();
-    void top_collision();
-    void bottom_collision();
-    void left_collision();
-    void right_collision();
-    void topRight_collision();
-    void topLeft_collision();
-    void bottomLeft_collision();
-    void bottomRight_collision();
+    void generate_position();
+    /// static methods
+    static void set_srand();
+
 public:
     ant(sf::Texture * textureptr);
     ~ant();
@@ -57,11 +48,9 @@ public:
     sf::FloatRect getlocalBounds();
     void setPos(sf::Vector2f position);
     float get_rotation();
-    void rotate();
     void found_food(food * food);
     bool get_has_food();
     void rotate_obj(float angle);
-    void handle_collision(collision::collision which);
     
     // static 
     static std::vector<pheromon >  * pheromones_storage;
