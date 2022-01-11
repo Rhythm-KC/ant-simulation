@@ -4,7 +4,7 @@ Game::Game(){
     init_variables();
     init_window();
     add_texture("ant", "../textures/ant.png");
-    init_object(textureMap["ant"]);
+    spawn_ants();
     init_food();
 }
 
@@ -15,6 +15,11 @@ Game::~Game(){
 void Game::init_variables(){
     Game::event = sf::Event();
     Game::window = nullptr;
+    antArray = std::vector<ant *>();
+    foodArray= std::vector<food*>();
+    max_ant_count = 10;
+    max_food_count = 30;
+
     
     
 }
@@ -25,7 +30,7 @@ void Game::init_window(){
 }
 
 void Game::init_object(sf::Texture * texture){
-    Game::simobj = new ant(texture);
+    Game::antArray.push_back(new ant(texture));
 }
 
 void Game::user_events(){
@@ -44,7 +49,7 @@ void Game::user_events(){
 void Game::init_food(){
     Game::foodObj = new food();
 }
-void Game::windowCollision(){
+void Game::windowCollision(ant * simobj){
     bool top = false;
     bool bottom = false;
     bool left = false;
@@ -106,7 +111,7 @@ void Game::windowCollision(){
     
 }
 
-void Game::finding_food(){
+void Game::finding_food(ant* simobj){
     if(!simobj->get_has_food())
     {
     if(simobj->getGlobalBounds().intersects(foodObj->getGlobalBounds())){
@@ -116,15 +121,22 @@ void Game::finding_food(){
 }
 
 void Game::update(){
-    simobj->update();
-    windowCollision();
-    finding_food();
+    for(auto & simobj: antArray){
+        simobj->update();
+        windowCollision(simobj);
+        finding_food(simobj);
+        std::cout << "object at "<<  simobj->getPos().x << " "<< simobj->getPos().y<< std::endl;
+        
+    }
     
 }
 
 void Game::render(){
     window->clear();
-    simobj->render(*window);
+    for(int i=0; i < antArray.size(); i++){
+        antArray.at(i)->render(*window);
+        std::cout << "rendering ant at "<< i <<std::endl;
+    }
     foodObj->render(*window);
 
     window->display();
@@ -136,6 +148,14 @@ void Game::run_game(){
         user_events();
         update();
         render();
+        std::cout << "?????????????????"<< std::endl;
+    }
+}
+
+void Game::spawn_ants(){
+    for(int i =0; i < max_ant_count; i++){
+        init_object(textureMap["ant"]);
+        std::cout<< i <<std::endl;
     }
 }
 

@@ -14,7 +14,8 @@ private:
     // object vector
     std::vector<ant * > antArray;
     std::vector<food *> foodArray;
-    ant * simobj;
+    int max_ant_count;
+    int max_food_count;
     food * foodObj;
 
     // methods 
@@ -25,8 +26,10 @@ private:
     void user_events();
     void update();
     void render();
-    void windowCollision();
-    void finding_food();
+    void windowCollision(ant * simobj);
+    void finding_food(ant* simobj);
+    void spawn_ants();
+    void spawn_foods();
 public:
     Game();
     ~Game();
