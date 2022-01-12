@@ -1,11 +1,13 @@
 #include "../include/Game.hpp"
 #include <iostream>
 Game::Game(){ 
+    srand(time(NULL));
     init_variables();
     init_window();
     add_texture("ant", "../textures/ant.png");
+    spawn_foods();
     spawn_ants();
-    init_food();
+    
 }
 
 Game::~Game(){
@@ -18,9 +20,7 @@ void Game::init_variables(){
     antArray = std::vector<ant *>();
     foodArray= std::vector<food*>();
     max_ant_count = 10;
-    max_food_count = 30;
-
-    
+    max_food_count = 10;
     
 }
 
@@ -46,8 +46,8 @@ void Game::user_events(){
     
 }
 
-void Game::init_food(){
-    Game::foodObj = new food();
+void Game::init_food(float x, float y){
+    foodArray.push_back( new food(x , y));
 }
 void Game::windowCollision(ant * simobj){
     bool top = false;
@@ -112,12 +112,17 @@ void Game::windowCollision(ant * simobj){
 }
 
 void Game::finding_food(ant* simobj){
-    if(!simobj->get_has_food())
-    {
-    if(simobj->getGlobalBounds().intersects(foodObj->getGlobalBounds())){
-        simobj->found_food(foodObj);
-    }
+    for(int i =0; i < foodArray.size(); i++){
+        food * foodObj = foodArray.at(i);
+        if(!simobj->get_has_food() && !foodObj->get_isTaken())
+        {
+        if(simobj->getGlobalBounds().intersects(foodObj->getGlobalBounds())){
+            simobj->found_food(foodObj);
+            foodObj->set_isTake(true); 
+        }
     } 
+        
+    }
 }
 
 void Game::update(){
@@ -125,7 +130,6 @@ void Game::update(){
         simobj->update();
         windowCollision(simobj);
         finding_food(simobj);
-        std::cout << "object at "<<  simobj->getPos().x << " "<< simobj->getPos().y<< std::endl;
         
     }
     
@@ -135,10 +139,10 @@ void Game::render(){
     window->clear();
     for(int i=0; i < antArray.size(); i++){
         antArray.at(i)->render(*window);
-        std::cout << "rendering ant at "<< i <<std::endl;
     }
-    foodObj->render(*window);
-
+    for(int i=0; i < foodArray.size(); i++){
+        foodArray.at(i)->render(*window);
+    }
     window->display();
 }
 
@@ -148,14 +152,20 @@ void Game::run_game(){
         user_events();
         update();
         render();
-        std::cout << "?????????????????"<< std::endl;
     }
 }
 
 void Game::spawn_ants(){
     for(int i =0; i < max_ant_count; i++){
         init_object(textureMap["ant"]);
-        std::cout<< i <<std::endl;
+    }
+}
+
+void Game::spawn_foods(){
+    for(int i =0; i< max_food_count; i++){
+        float x = ((rand()%100)/((float) 100))*1920;
+        float y=((rand()%100)/((float) 100))*1080;
+        init_food(x, y);
     }
 }
 

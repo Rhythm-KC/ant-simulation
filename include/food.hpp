@@ -5,13 +5,16 @@ class food
 {
 private:
     sf::CircleShape food_shape;
+    bool isTake;
     int posX;
     int posY;
     
 public:
     
-    food(/* args */);
+    food(float x, float y);
     ~food();
+    void set_isTake(bool value );
+    bool get_isTaken();
     void setPos(float x, float y);
     sf::FloatRect getGlobalBounds();
     void render(sf::RenderTarget &target);

@@ -16,10 +16,9 @@ private:
     std::vector<food *> foodArray;
     int max_ant_count;
     int max_food_count;
-    food * foodObj;
 
     // methods 
-    void init_food();
+    void init_food(float x, float y );
     void init_object(sf::Texture * texturePtr);
     void init_variables();
     void init_window();
