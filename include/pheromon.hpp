@@ -2,8 +2,8 @@
 #define PHERAMON_H
 #include <SFML/Graphics.hpp>
 enum pheromon_types{
-    home,
-    foods
+    home_pheromon,
+    food_pheromon,
 };
 class pheromon
 {

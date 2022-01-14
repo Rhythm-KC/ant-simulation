@@ -18,7 +18,7 @@ pheromon::~pheromon(){
 
 void pheromon::set_color(pheromon_types type){
 
-    if(type == pheromon_types::foods){
+    if(type == pheromon_types::food_pheromon){
         shape.setFillColor(sf::Color::White);
         return;
     }
