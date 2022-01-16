@@ -5,6 +5,10 @@ food::food(float x, float y){
     food_shape.setPosition(x,y);
     isTake = false;
 }
+
+food::~food(){
+
+}
 sf::FloatRect food::getGlobalBounds(){
     return food_shape.getGlobalBounds();
 }
