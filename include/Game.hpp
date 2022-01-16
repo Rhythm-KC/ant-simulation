@@ -2,6 +2,7 @@
 #define GAME_H
 #include "CollisionType.hpp"
 #include "ant.hpp"
+#include "home.hpp"
 class Game
 {
 private:
@@ -16,13 +17,15 @@ private:
     std::vector<food *> foodArray;
     int max_ant_count;
     int max_food_count;
-
+    // home object
+    home * homeObj;
     // methods 
     void init_food(float x, float y );
     void init_object(sf::Texture * texturePtr);
     void init_variables();
     void init_window();
     void user_events();
+    void init_home();
     void update();
     void render();
     void windowCollision(ant * simobj);

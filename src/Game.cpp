@@ -5,6 +5,7 @@ Game::Game(){
     init_variables();
     init_window();
     add_texture("ant", "../textures/ant.png");
+    init_home();
     spawn_foods();
     spawn_ants();
     
@@ -49,6 +50,12 @@ void Game::user_events(){
 void Game::init_food(float x, float y){
     foodArray.push_back( new food(x , y));
 }
+
+void Game::init_home(){
+    homeObj = new home(100.f , 300.f, 400.f);
+}
+
+
 void Game::windowCollision(ant * simobj){
     bool top = false;
     bool bottom = false;
@@ -137,6 +144,7 @@ void Game::update(){
 
 void Game::render(){
     window->clear();
+    homeObj->render(*window);
     for(int i=0; i < antArray.size(); i++){
         antArray.at(i)->render(*window);
     }
