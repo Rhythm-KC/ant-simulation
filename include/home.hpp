@@ -5,14 +5,15 @@ class home
 {
 private:
     sf::CircleShape homeShape;
-
 public:
     home(float radius, float xCoordinat, float yCoordinate);
 
     ~home();
     void setPosition(float x, float y);
     sf::Vector2f getPosition();
+    float getRadius();
     void render(sf::RenderTarget &target);
+    void rotate();
 
 };
 
