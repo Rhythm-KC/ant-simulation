@@ -10,11 +10,14 @@ class ant
 {
 private:
     // static variables 
+    
     static float posX;
     static float posY;
     static std::vector<float> generated_points;
     // non static variables
     int drop_time;
+    sf::Vector2f desiredDirection;
+    sf::Vector2f velocity;
     bool has_food;
     food * ants_food; 
     std::default_random_engine generator; 
@@ -41,6 +44,7 @@ public:
     ~ant();
 
     //methods 
+    sf::Vector2f clampVector(sf::Vector2f vector, float maxMag);
     void update();
     void render(sf::RenderTarget &target);
     sf::FloatRect getGlobalBounds();
@@ -51,6 +55,7 @@ public:
     void found_food(food * food);
     bool get_has_food();
     void rotate_obj(float angle);
+    void followMouse(sf::Vector2i mousePos);
     
     // static 
     static std::vector<pheromon >  * pheromones_storage;

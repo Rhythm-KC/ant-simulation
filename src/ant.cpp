@@ -11,10 +11,10 @@ std::vector<float> ant:: generated_points = std::vector<float>();
 std::vector<pheromon> * ant::pheromones_storage = new std::vector<pheromon>;
 
 //constructor
-ant::ant(sf::Texture * textureptr) : distribution(-30.f, 30.f) 
+ant::ant(sf::Texture * textureptr): distribution(-1.f,1.f) 
 {
+    desiredDirection = sf::Vector2f(0.f,0.f);
     init_variables(); 
-
     this->sprite.setTexture(*textureptr);
     sprite.scale(sf::Vector2f(0.12f,0.12f));
     generate_position(); 
@@ -29,23 +29,24 @@ ant::~ant()
     
 }
 void ant::init_variables(){
-    this->generator = std::default_random_engine();
     turn_cooldown = 0;
+    velocity = sf::Vector2f(0,0);
     drop_time = 50;
     has_food = false;
     ants_food = nullptr;
 
 }
 void ant::movement(){
-    move_around(); 
+    //move_around(); 
+    followMouse(sf::Mouse::getPosition());
    update_phereamon();
 
 }
 sf::FloatRect ant::getGlobalBounds(){
-    return boundingShape.getGlobalBounds();
+    return sprite.getGlobalBounds();
 }
 sf::Vector2f ant::getPos(){
-    return boundingShape.getPosition();
+    return sprite.getPosition();
 }
 void ant::setPos(sf::Vector2f position){
     boundingShape.setPosition(position);
@@ -65,104 +66,16 @@ void ant::render(sf::RenderTarget &target){
     }
 }
 
-/*
-    @pre: collisions are not handled by this function 
-    This function moves the ant rondomly in the screen
-        a random able is gnererated between -30 degree and 30 degree
-        this is done every 10 frames 
-        between those 10 frames the ant moves along the same angle with a certain speed 
-*/
-void ant::move_around(){
-    // generating new angle of to which the ant has to be rotated
-    if(turn_cooldown == 25){ 
-        float angle = distribution(generator);
-        sprite.rotate(angle);
-        boundingShape.rotate(angle);
-        turn_cooldown = 0;
-    }else{
-        turn_cooldown++;
-    }
-
-    float angle = sprite.getRotation();
-    double sprite_angle = angle*((M_PI)/180); // converting to raidians
-
-    if(angle > 0 && angle <=90){
-        this->posY = - cos(sprite_angle) * 1.5f;
-        this->posX = sin(sprite_angle) * 1.5f;
-    }
-    else if( angle > 90 && angle <= 180) {
-        angle = 180- angle;
-        sprite_angle = angle *(M_PI/180);
-        this->posX = sin(sprite_angle) * 1.5f;
-        posY = cos(sprite_angle) * 1.5f;
-
-    }else if (angle > 180 && angle <= 270){
-        angle =  angle - 180;
-        sprite_angle = angle * (M_PI/180);
-        posX = -sin(sprite_angle) * 1.5f;
-        posY = cos(sprite_angle) * 1.5f;
-    }else if(angle > 270 && angle <= 360)
-    {
-        angle = angle -270;
-        sprite_angle = angle *(M_PI /180);
-        posX = -cos(sprite_angle) * 1.5f;
-        posY = -sin(sprite_angle) * 1.5f;
-
-    }
-    // moving the ant obj
-    sprite.move(this->posX,this->posY);
-    boundingShape.move(this->posX,this->posY);
-    // moving food if ant has any;
-    if(has_food){
-        ants_food->update_pos(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width/2,sprite.getGlobalBounds().top);
-    }
-    drop_pheromon();
-}
-
-void ant::keyboard_rotate(){
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-        sprite.rotate(2.f);
-        boundingShape.rotate(2.f);
-
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
-        sprite.rotate(-2.f);
-        boundingShape.rotate(-2.f);
-    }
-    
-    
-}
-
-void ant::keyBoard_movement(){
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-        sprite.move(-5.f, 0);
-        boundingShape.move(-5.f,0);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-        sprite.move(5.f, 0);
-        boundingShape.move(5.f,0);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-        sprite.move(0.f, -.5f);
-        boundingShape.move(0,-.5f);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-        sprite.move(0.f, .5f);
-        boundingShape.move(0,.5f);
-    }
-}
-
 /* 
     this creates new phereomons and add to the pheromon storage vector 
 */
 void ant::drop_pheromon(){
     if(drop_time ==0){
         if (has_food){
-            pheromones_storage->push_back(pheromon(pheromon_types::foods, this->getPos().x,this->getPos().y));
+            pheromones_storage->push_back(pheromon(pheromon_types::food_pheromon, this->getPos().x,this->getPos().y));
         
         }else{
-            pheromones_storage->push_back(pheromon(pheromon_types::home, this->getPos().x,this->getPos().y));
+            pheromones_storage->push_back(pheromon(pheromon_types::home_pheromon, this->getPos().x,this->getPos().y));
         }
         drop_time = 50;
     }
@@ -174,18 +87,6 @@ void ant::drop_pheromon(){
 */
 void ant::update(){
     movement();
-    update_phereamon();
-    keyBoard_movement();
-    keyboard_rotate();
-    
-    //std::cout << "angle " << sprite.getRotation()<< std::endl;
-    //std::cout << "top " << sprite.getGlobalBounds().top << std::endl;
-    //std::cout << "left "  << sprite.getGlobalBounds().left<< std::endl;
-    //std::cout << "pos x " << sprite.getPosition().x<< std::endl;
-    //std::cout << "pos y " << sprite.getPosition().y<< std::endl;
-    //std::cout << "height " << sprite.getGlobalBounds().height<< std::endl;
-    //std::cout << "width " << sprite.getGlobalBounds().width<< std::endl;
-    //std::cout << "/////////////" <<std::endl; 
 }
 
 /* provides with the angle at which the ant object is rotated in degrees
@@ -250,3 +151,31 @@ std::vector<pheromon> * ant::get_pheromon_storage(){
     return ant::pheromones_storage;
 }
 
+
+void ant::followMouse(sf::Vector2i mousePos){
+    float time = 1/60.f*100;
+    float steerStrength = 2.f;
+    float wanderStrength = 0.15f;
+    float x = distribution(generator); 
+    float y = distribution(generator);
+
+    desiredDirection =  desiredDirection +(sf::Vector2f(x,y) * wanderStrength) ;
+    float magnitude = sqrt((desiredDirection.x* desiredDirection.x) + (desiredDirection.y* desiredDirection.y));
+    desiredDirection/= magnitude;
+    float angle = atan2(-desiredDirection.y,desiredDirection.x) *(180/M_PI);
+    sf:: Vector2f desiredVelocity = desiredDirection* 1.5f;
+    sf::Vector2f steeringForce = (desiredVelocity - velocity) * steerStrength;
+    sf::Vector2f acceleration = clampVector(steeringForce,steerStrength); 
+    velocity = clampVector(velocity+acceleration* time, 2.f); 
+    rotate_obj(90.f - angle);
+    setPos(getPos()+ velocity * time);
+}
+
+sf::Vector2f  ant::clampVector(sf::Vector2f  vector, float maxMag){
+    float mag = sqrt(vector.x * vector.x + (vector.y * vector.y));
+    if (mag <= maxMag){
+        return vector;
+    }
+    vector/= maxMag;
+    return vector;
+}
