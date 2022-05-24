@@ -1,6 +1,2 @@
-.vscode/targets.log
-.vscode/dryrun.log
-.vscode/c_cpp_properties.json
-.vscode/configurationCache.log
-.vscode/c_cpp_properties.json
+.vscode/
 objFiles/
