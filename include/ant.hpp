@@ -36,6 +36,8 @@ private:
     void keyBoard_movement();
     void keyboard_rotate();
     void generate_position();
+    void rotate_obj(float angle);
+    sf::Vector2f clampVector(sf::Vector2f vector, float maxMag);
     /// static methods
     static void set_srand();
 
@@ -44,7 +46,6 @@ public:
     ~ant();
 
     //methods 
-    sf::Vector2f clampVector(sf::Vector2f vector, float maxMag);
     void update();
     void render(sf::RenderTarget &target);
     sf::FloatRect getGlobalBounds();
@@ -54,9 +55,8 @@ public:
     float get_rotation();
     void found_food(food * food);
     bool get_has_food();
-    void rotate_obj(float angle);
-    void followMouse(sf::Vector2i mousePos);
-    
+    void setDesiredDirection(sf::Vector2f position);
+    sf::Vector2f getDesiredDirection();
     // static 
     static std::vector<pheromon >  * pheromones_storage;
     static std::vector<pheromon > * get_pheromon_storage();

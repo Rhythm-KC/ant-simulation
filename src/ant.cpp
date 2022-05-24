@@ -25,11 +25,15 @@ ant::ant(sf::Texture * textureptr): distribution(-1.f,1.f)
 }
 
 ant::~ant()
-{
-    
+{}    
+
+sf::Vector2f ant::getDesiredDirection(){
+    return desiredDirection;
+}
+void ant::setDesiredDirection(sf::Vector2f position){
+    desiredDirection = position;
 }
 void ant::init_variables(){
-    turn_cooldown = 0;
     velocity = sf::Vector2f(0,0);
     drop_time = 50;
     has_food = false;
@@ -37,9 +41,8 @@ void ant::init_variables(){
 
 }
 void ant::movement(){
-    //move_around(); 
-    followMouse(sf::Mouse::getPosition());
-   update_phereamon();
+    move_around(); 
+    update_phereamon();
 
 }
 sf::FloatRect ant::getGlobalBounds(){
@@ -152,7 +155,7 @@ std::vector<pheromon> * ant::get_pheromon_storage(){
 }
 
 
-void ant::followMouse(sf::Vector2i mousePos){
+void ant::move_around(){
     float time = 1/60.f*100;
     float steerStrength = 2.f;
     float wanderStrength = 0.15f;

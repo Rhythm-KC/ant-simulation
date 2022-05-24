@@ -55,7 +55,12 @@ void Game::init_home(){
 
 
 void Game::windowCollision(ant * simobj){
-   return; 
+   if (simobj->getGlobalBounds().top < 0 || simobj->getGlobalBounds().top > window->getSize().x || simobj->getGlobalBounds().top > window->getSize().y ){
+      sf::Vector2f newPos = sf::Vector2f(window->getSize().x/2, window->getSize().y/2) - simobj->getPos();
+      float mag = sqrt((newPos.x * newPos.x) + (newPos.y * newPos.y));
+      newPos/= mag;
+      simobj->setDesiredDirection(newPos);
+   }
 }
 
 void Game::finding_food(ant* simobj){
@@ -74,7 +79,7 @@ void Game::finding_food(ant* simobj){
 
 void Game::update(){
     for(auto & simobj: antArray){
-        simobj->followMouse(sf::Mouse::getPosition(*window));
+        simobj->update();
         windowCollision(simobj);
         finding_food(simobj);
         

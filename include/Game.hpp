@@ -3,6 +3,7 @@
 #include "CollisionType.hpp"
 #include "ant.hpp"
 #include "home.hpp"
+#include "food.hpp"
 class Game
 {
 private:
