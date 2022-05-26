@@ -2,8 +2,6 @@
 #include <iostream>
 #include <cmath>
 // setting up static methods and variables 
-float ant::posX = 800.f;
-float ant::posY = 800.f;
 void ant::set_srand(){
     srand(time(NULL));
 }
@@ -19,7 +17,7 @@ ant::ant(sf::Texture * textureptr): distribution(-1.f,1.f)
     sprite.scale(sf::Vector2f(0.12f,0.12f));
     generate_position(); 
     this->sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2));
-    setPos(sf::Vector2f(posX,posY));
+    setPos(sf::Vector2f(400,400));
     antSensor = new sensor(getPos(), get_rotation());
 }
 
