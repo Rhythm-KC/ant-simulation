@@ -1,6 +1,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 #include <SFML/Graphics.hpp>
+#include "pheromon.hpp"
 class  sensor
 {
 private:
@@ -11,6 +12,7 @@ private:
     void setOriginandColor(); 
     void buildSensor();     
     void setPos(sf::Vector2f pos);
+    sf::Vector2f checkPheromon(std::vector<pheromon> storage);
 public:
      sensor(sf::Vector2f antPos, float rotation);
      

@@ -13,7 +13,8 @@ private:
     
     static std::vector<float> generated_points;
     // non static variables
-    int drop_time;
+    sf::Clock antsClock;
+    float previous_drop;
     sf::Vector2f desiredDirection;
     sf::Vector2f velocity;
     bool has_food;
@@ -22,13 +23,12 @@ private:
     std::default_random_engine generator; 
     std:: uniform_real_distribution<float> distribution;
     sf::Sprite sprite;
-    unsigned turn_cooldown;
     // methods
     void init_variables();
     void init_sprite(sf::Texture * texture);
     void drop_pheromon();
     void find_food();
-    void update_phereamon();
+    void checkSensor();
     void movement();
     void move_around();
     void keyBoard_movement();

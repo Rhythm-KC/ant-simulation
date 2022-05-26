@@ -1,6 +1,7 @@
 #include "../include/ant.hpp"
 #include <iostream>
 #include <cmath>
+#include <chrono>
 // setting up static methods and variables 
 void ant::set_srand(){
     srand(time(NULL));
@@ -32,14 +33,16 @@ void ant::setDesiredDirection(sf::Vector2f position){
 }
 void ant::init_variables(){
     velocity = sf::Vector2f(0,0);
-    drop_time = 50;
     has_food = false;
     ants_food = nullptr;
+    antsClock = sf::Clock();
+    previous_drop = 0;
 
 }
 void ant::movement(){
+    checkSensor();
     move_around(); 
-    update_phereamon();
+    drop_pheromon();
     antSensor->update(getPos(), get_rotation());
 
 }
@@ -70,16 +73,15 @@ void ant::render(sf::RenderTarget &target){
     this creates new phereomons and add to the pheromon storage vector 
 */
 void ant::drop_pheromon(){
-    if(drop_time ==0){
-        if (has_food){
-            pheromones_storage->push_back(pheromon(pheromon_types::food_pheromon, this->getPos().x,this->getPos().y));
-        
-        }else{
-            pheromones_storage->push_back(pheromon(pheromon_types::home_pheromon, this->getPos().x,this->getPos().y));
+   float time_elaspsed = antsClock.getElapsedTime().asSeconds() -previous_drop; 
+    if(time_elaspsed >= 1.00){
+        if(has_food){
+            pheromones_storage->push_back(pheromon(pheromon_types::home_pheromon, getPos(), antsClock.getElapsedTime().asSeconds(), &antsClock));
+            return;
         }
-        drop_time = 50;
+        pheromones_storage->push_back(pheromon(pheromon_types::food_pheromon, getPos(),antsClock.getElapsedTime().asSeconds(), &antsClock));
+        previous_drop = antsClock.getElapsedTime().asSeconds();
     }
-    drop_time--;
 }
 
 /*
@@ -95,18 +97,6 @@ float ant::get_rotation(){
     return sprite.getRotation();
 }
 
-/*
-    updates the the pheromons strength and removes the pheramon if the it has a strength of 0
-*/
-void ant::update_phereamon(){
-    for(unsigned int i =0 ; i < pheromones_storage->size(); i++){
-        if( pheromones_storage->at(i).get_strength() <= 0){
-            pheromones_storage->erase(pheromones_storage->begin() + i);
-            break;
-        }
-        pheromones_storage->at(i).strength_update();
-    }
-}
 
 /*
     lets the ant know that it has found food 
@@ -166,4 +156,8 @@ sf::Vector2f  ant::clampVector(sf::Vector2f  vector, float maxMag){
     }
     vector/= maxMag;
     return vector;
+}
+
+void ant::checkSensor(){
+    
 }

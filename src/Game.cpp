@@ -55,7 +55,7 @@ void Game::init_home(){
 
 
 void Game::windowCollision(ant * simobj){
-   if (simobj->getGlobalBounds().top < 0 || simobj->getGlobalBounds().top > window->getSize().x || simobj->getGlobalBounds().top > window->getSize().y ){
+   if (simobj->getGlobalBounds().top < 0 || simobj->getGlobalBounds().width > window->getSize().x || simobj->getGlobalBounds().top > window->getSize().y ){
       sf::Vector2f newPos = sf::Vector2f(window->getSize().x/2, window->getSize().y/2) - simobj->getPos();
       float mag = sqrt((newPos.x * newPos.x) + (newPos.y * newPos.y));
       newPos/= mag;

@@ -1,12 +1,12 @@
 #include "../include/pheromon.hpp" 
 int pheromon::PHEROMON_COUNT = 1; 
 int pheromon::PHEROMON_STRENGTH =200;
-pheromon::pheromon(pheromon_types type, float posX, float posY){
+pheromon::pheromon(pheromon_types type, sf::Vector2f postition, float createdTime, sf::Clock * antsClock){
     this->shape = sf::CircleShape(4);
     this->type = type;
-    strength = (PHEROMON_COUNT) * (PHEROMON_STRENGTH - 50);
-    PHEROMON_COUNT ++;
-    shape.setPosition(posX,posY);
+    dropTime = createdTime;
+    this->antsClock = antsClock;
+    shape.setPosition(postition);
     set_color(type);
 
 }
@@ -25,19 +25,19 @@ void pheromon::set_color(pheromon_types type){
     shape.setFillColor(sf::Color::Cyan);
 }
 
-void pheromon::strength_update(){
-    strength--;
-
+double pheromon::get_strength(){
+    return dropTime/antsClock->getElapsedTime().asSeconds(); 
 }
 sf::Vector2f pheromon::get_position(){
     return this->shape.getPosition();
+    
 }
 
-int pheromon::get_strength(){
-    return this->strength;
+sf::FloatRect pheromon::get_globalBounds(){
+    return shape.getGlobalBounds();
 }
+
 
 void pheromon::render(sf::RenderTarget &target){
-
     target.draw(shape);
 }

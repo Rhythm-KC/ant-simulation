@@ -34,6 +34,40 @@ void sensor::setOriginandColor(){
     sensorRight.setFillColor(sf::Color::Blue);
     sensorLeft.setFillColor(sf::Color::Yellow);
 }
+
+sf::Vector2f sensor::checkPheromon(std::vector<pheromon> storage)
+{   
+    float centerStr = 0.f;
+    float leftStr= 0.f;
+    float rightStr= 0.f;
+
+    for(auto & phero : storage){
+        float strength = phero.get_strength();
+        if(strength <=0){
+            phero.~pheromon();
+            continue;
+        }
+        if (phero.get_globalBounds().intersects(sensorCenter.getGlobalBounds())){
+            centerStr += phero.get_strength();
+        }
+        if (phero.get_globalBounds().intersects(sensorLeft.getGlobalBounds())){
+            leftStr+= phero.get_strength();
+        }
+        if (phero.get_globalBounds().intersects(sensorRight.getGlobalBounds())){
+            rightStr+= phero.get_strength();
+        }
+    }
+    if (centerStr >= std::max(leftStr,rightStr)){
+        return sensorCenter.getPosition(); 
+    }
+    if (leftStr > rightStr){
+        return sensorLeft.getPosition();
+    }else{
+        return sensorRight.getPosition();
+    }
+    return sf::Vector2f(-1,-1);
+}
+
 void sensor::render(sf::RenderTarget &target){
     target.draw(sensorCenter);
     target.draw(sensorRight);
