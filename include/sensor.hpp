@@ -8,10 +8,7 @@ private:
     sf::CircleShape sensorLeft;
     sf::CircleShape sensorRight;
     sf::CircleShape sensorCenter; 
-    sf::Vector2f centerVec;
-    sf::Vector2f leftVec;
-    sf::Vector2f rightVec;
-    
+    void setOriginandColor(); 
     void buildSensor();     
     void setPos(sf::Vector2f pos);
 public:
