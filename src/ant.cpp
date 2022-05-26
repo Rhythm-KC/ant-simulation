@@ -2,8 +2,8 @@
 #include <iostream>
 #include <cmath>
 // setting up static methods and variables 
-float ant::posX = 400.f;
-float ant::posY = 400.f;
+float ant::posX = 800.f;
+float ant::posY = 800.f;
 void ant::set_srand(){
     srand(time(NULL));
 }
@@ -19,9 +19,7 @@ ant::ant(sf::Texture * textureptr): distribution(-1.f,1.f)
     sprite.scale(sf::Vector2f(0.12f,0.12f));
     generate_position(); 
     this->sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2));
-    boundingShape.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height ));
-    boundingShape.setFillColor(sf::Color::White);
-    boundingShape.setOrigin(sf::Vector2f(boundingShape.getLocalBounds().width/2,boundingShape.getLocalBounds().height));
+    setPos(sf::Vector2f(posX,posY));
     antSensor = new sensor(getPos(), get_rotation());
 }
 
@@ -54,17 +52,15 @@ sf::Vector2f ant::getPos(){
     return sprite.getPosition();
 }
 void ant::setPos(sf::Vector2f position){
-    boundingShape.setPosition(position);
     sprite.setPosition(position);
     if(has_food){
         ants_food->setPos(position.x, position.y);
     }
 }
 sf::FloatRect ant::getlocalBounds(){
-    return boundingShape.getLocalBounds();
+    return sprite.getLocalBounds();
 }
 void ant::render(sf::RenderTarget &target){
-    target.draw(this->boundingShape);
     target.draw(this->sprite);
     for(int i =0; i < pheromones_storage->size(); i++){
         pheromones_storage->at(i).render(target);
@@ -128,7 +124,6 @@ void ant::found_food(food * food){
 
 void ant::rotate_obj(float angle){
     sprite.setRotation(angle);
-    boundingShape.setRotation(angle);
 }
 
 bool ant::get_has_food(){

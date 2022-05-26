@@ -11,8 +11,6 @@ class ant
 private:
     // static variables 
     
-    static float posX;
-    static float posY;
     static std::vector<float> generated_points;
     // non static variables
     int drop_time;
@@ -25,7 +23,6 @@ private:
     std:: uniform_real_distribution<float> distribution;
     sf::Sprite sprite;
     unsigned turn_cooldown;
-    sf::RectangleShape boundingShape;
     // methods
     void init_variables();
     void init_sprite(sf::Texture * texture);
