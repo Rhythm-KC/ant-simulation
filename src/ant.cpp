@@ -22,6 +22,7 @@ ant::ant(sf::Texture * textureptr): distribution(-1.f,1.f)
     boundingShape.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height ));
     boundingShape.setFillColor(sf::Color::White);
     boundingShape.setOrigin(sf::Vector2f(boundingShape.getLocalBounds().width/2,boundingShape.getLocalBounds().height));
+    antSensor = new sensor(getPos(), get_rotation());
 }
 
 ant::~ant()
@@ -43,6 +44,7 @@ void ant::init_variables(){
 void ant::movement(){
     move_around(); 
     update_phereamon();
+    antSensor->update(getPos(), get_rotation());
 
 }
 sf::FloatRect ant::getGlobalBounds(){
@@ -67,6 +69,7 @@ void ant::render(sf::RenderTarget &target){
     for(int i =0; i < pheromones_storage->size(); i++){
         pheromones_storage->at(i).render(target);
     }
+    antSensor->render(target);
 }
 
 /* 
@@ -133,17 +136,6 @@ bool ant::get_has_food(){
 }
 
 void ant::generate_position(){
-    int radius = 50;
-    float theta = (rand()%200)/(float)100;
-    while(std::find(generated_points.begin(), generated_points.end(), theta) != generated_points.end() && !generated_points.empty()){
-        float theta = (rand()%200)/(float)100;
-    }
-    generated_points.push_back(theta);
-    theta*= (2*M_PI);
-    float y = posY - sin(theta) * radius + 40.f;
-    float x = posX + cos(theta) * radius + 40.f;
-    setPos(sf::Vector2f(x,y));
-    rotate_obj(theta * 360);
 }
 
 

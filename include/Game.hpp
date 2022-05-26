@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-#include "CollisionType.hpp"
 #include "ant.hpp"
 #include "home.hpp"
 #include "food.hpp"

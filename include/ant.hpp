@@ -2,9 +2,9 @@
 #define ANT_H
 #include <ctime>
 #include <SFML/Graphics.hpp>
-#include "CollisionType.hpp"
 #include "pheromon.hpp"
 #include "food.hpp"
+#include "sensor.hpp"
 #include <random>
 class ant 
 {
@@ -19,6 +19,7 @@ private:
     sf::Vector2f desiredDirection;
     sf::Vector2f velocity;
     bool has_food;
+    sensor * antSensor;
     food * ants_food; 
     std::default_random_engine generator; 
     std:: uniform_real_distribution<float> distribution;
